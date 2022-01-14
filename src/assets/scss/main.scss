@@ -1,0 +1,17 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700,700i,800');
+
+@import "variables";
+@import "reset";
+
+#app {
+    max-width: 500px;
+    margin: 0 auto;
+    text-align: center;
+    font-family: 'Open Sans', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+}
+
+button {
+    cursor: pointer;
+    margin: 0;
+    padding: 0;
+ }

@@ -1,0 +1,91 @@
+<template>
+    <header class="header">
+        <div class="header-buttons">
+            <button class="header-button header-button-info"><Info/></button>
+        </div>
+        <h1 class="header-title">Squirdle</h1>
+        <div class="header-buttons">
+            <button class="header-button header-button-medal"><Medal/></button>
+            <button class="header-button header-button-settings"><Settings/></button>
+        </div>
+    </header>
+</template>
+
+<script>
+import Info from "@/components/icons/Info";
+import Medal from "@/components/icons/Medal";
+import Settings from "@/components/icons/Settings";
+export default {
+    name: "Header",
+    components: {Settings, Medal, Info}
+}
+</script>
+
+<style lang="scss">
+@import '../assets/scss/variables';
+
+.header {
+    text-transform: uppercase;
+    height: 48px;
+    border-bottom: 1px solid $light-grey;
+    margin-bottom: 16px;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    h1 {
+        font-weight: 800;
+    }
+
+    &-title {
+        pointer-events: none;
+        position: absolute;
+        width: 100%;
+        height: 48px;
+        line-height: 48px;
+        top: 0;
+    }
+
+    &-button {
+        border: 0;
+        background: 0;
+        padding: 12px;
+
+        svg {
+            height: 24px;
+            width: 24px;
+            transition: transform 200ms $easing;
+            path {
+                fill: $black;
+                transition: fill 200ms $easing;
+            }
+        }
+
+        &:hover, &:focus {
+            svg {
+                transform: scale(1.2) rotate(5deg);
+            }
+        }
+        &-info {
+            &:hover, &:focus {
+                svg path {
+                    fill: $green;
+                }
+            }
+        }
+        &-medal {
+            &:hover, &:focus {
+                svg path {
+                    fill: $pink;
+                }
+            }
+        }
+        &-settings {
+            &:hover, &:focus {
+                svg path {
+                    fill: $blue;
+                }
+            }
+        }
+    }
+}
+</style>
