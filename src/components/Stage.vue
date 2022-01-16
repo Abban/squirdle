@@ -20,10 +20,10 @@ export default {
 
 <style lang="scss">
 @import '../assets/scss/variables';
-
 .stage-row {
     margin: 0 -2px 8px;
     display: flex;
+    justify-content: center;
 }
 
 .letter {
@@ -36,6 +36,7 @@ export default {
     text-transform: uppercase;
     font-size: 20px;
     position: relative;
+    max-width: 50px;
 
     transition: opacity 400ms $easing;
     transition-delay: calc(0.2s * var(--index));
@@ -70,7 +71,7 @@ export default {
     }
 
     &-inner {
-        position: relative;
+        position: absolute;
         z-index: 10;
         width: 100%;
         height: 100%;

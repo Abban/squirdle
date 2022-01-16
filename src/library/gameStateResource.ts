@@ -1,6 +1,5 @@
 import {GameState, GAME_STATE} from "@/entities/GameState";
 import createEmptyGuesses from "@/library/createEmptyGuesses";
-import {Guess} from "@/entities/Guess";
 import createKeyboard from "@/library/createKeyboard";
 
 const ITEM_NAME = 'gameState';

@@ -1,12 +1,12 @@
 <template>
     <header class="header">
         <div class="header-buttons">
-            <button class="header-button header-button-info"><Info/></button>
+            <button class="header-button header-button-info" v-on:click="$emit('show-info')"><Info/></button>
         </div>
         <h1 class="header-title">Squirdle</h1>
         <div class="header-buttons">
-            <button class="header-button header-button-medal"><Medal/></button>
-            <button class="header-button header-button-settings"><Settings/></button>
+            <button class="header-button header-button-medal" v-on:click="$emit('show-stats')"><Medal/></button>
+            <button class="header-button header-button-settings" v-on:click="$emit('show-settings')"><Settings/></button>
         </div>
     </header>
 </template>
@@ -17,7 +17,8 @@ import Medal from "@/components/icons/Medal";
 import Settings from "@/components/icons/Settings";
 export default {
     name: "Header",
-    components: {Settings, Medal, Info}
+    components: {Settings, Medal, Info},
+    emits: ['show-info', 'show-stats', 'show-settings']
 }
 </script>
 
@@ -43,6 +44,7 @@ export default {
         height: 48px;
         line-height: 48px;
         top: 0;
+        margin: 0;
     }
 
     &-button {
@@ -83,6 +85,13 @@ export default {
             &:hover, &:focus {
                 svg path {
                     fill: $blue;
+                }
+            }
+        }
+        &-cross {
+            &:hover, &:focus {
+                svg path {
+                    fill: $red;
                 }
             }
         }

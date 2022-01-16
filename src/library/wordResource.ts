@@ -10,4 +10,11 @@ const getWord = (date: Number, seed: Number): string => {
     return wordArray(pokemon)[0].toLowerCase();
 }
 
-export default getWord;
+const wordExists = (word: string): Boolean => {
+    return pokemon.indexOf(word) !== -1;
+}
+
+export default {
+    getWord,
+    wordExists
+};

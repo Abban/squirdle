@@ -1,6 +1,6 @@
 const getUniqueDateIdentifier = (): Number => {
-    const date = new Date();
-    return parseInt(`${date.getFullYear()}${date.getMonth()}${date.getDay()}`);
+    const date: Date = new Date();
+    return parseInt(`${date.getFullYear()}${date.getMonth()}${date.getDate()}`);
 }
 
 export default getUniqueDateIdentifier;
