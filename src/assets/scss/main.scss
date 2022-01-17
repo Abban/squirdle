@@ -3,12 +3,12 @@
 @import "variables";
 @import "reset";
 
-html, body {
-    height: 100%;
+body {
+    margin: 0;
+    padding: 0;
 }
 
 #app {
-    position: relative;
     display: flex;
     flex-direction: column;
     max-width: 500px;

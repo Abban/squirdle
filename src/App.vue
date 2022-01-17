@@ -7,6 +7,7 @@
     <div class="stage-container">
         <Stage :columns="columns" :guesses="gameState.guesses"/>
     </div>
+    {{word}}
     <Keyboard
         :keyboard="gameState.keyboard"
         v-on:character-click="onCharacterClick"
@@ -21,7 +22,8 @@
     <ModalStats
         v-if="statsVisible"
         :stats="stats"
-        :state="gameState.state"
+        :gameState="gameState"
+        :puzzle-number="puzzleNumber"
         v-on:close="statsVisible = false"
     />
     <ModalPreferences

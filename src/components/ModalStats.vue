@@ -36,7 +36,7 @@
             </div>
             <div class="stat">
                 <div class="stat-number">
-                    {{ Math.floor(stats.won / stats.played * 100) }}%
+                    {{ percentage(stats.won, stats.played) }}%
                 </div>
                 <div class="stat-text">
                     % wins
@@ -47,20 +47,21 @@
         <div class="distribution">
             <div class="distribution-row" v-for="(guess, index) in stats.guesses" :key="index">
                 <div class="distribution-guesses">
-                    {{index+1}}
+                    {{ index + 1 }}
                 </div>
                 <div class="distribution-percentage-container">
-                    <div class="distribution-percentage" :style="{width: `${Math.floor(guess/total*100)}%`}">
+                    <div class="distribution-percentage" :style="{width: `${percentage(guess, total)}%`}">
                         <div class="distribution-percentage-text">
-                            {{ Math.floor(guess/total*100) }}%
+                            {{ percentage(guess, total) }}%
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="share">
-            <button class="share-button">Share</button>
+        <div class="spread">
+            <input type="text" class="spread-element" v-model="shareText" ref="shareTextElement" v-on:focus="$event.target.select()" readonly/>
+            <button class="spread-button" v-on:click="copyShareText">Share</button>
         </div>
     </Modal>
 </template>
@@ -69,33 +70,64 @@
 import Modal from "@/components/Modal.vue";
 import {Stats} from "@/entities/Stats";
 import {ref, watchEffect} from "vue";
-import {GAME_STATE} from "@/entities/GameState";
+import {GAME_STATE, GameState} from "@/entities/GameState";
+import createShareString from "@/library/createShareString";
 
 export default {
     name: "ModalStats",
     components: {Modal},
     props: {
         stats: Object as () => Stats,
-        state: String
+        gameState: Object as () => GameState,
+        puzzleNumber: Number,
     },
     setup(props: any) {
         const getTotal = (): number => {
             return props.stats?.guesses.reduce((a: number, b: number) => a + b, 0);
         }
+
+        const percentage = (number1: number, number2: number): number => {
+            if (number2 === 0) return 0;
+            return Math.floor(number1 / number2 * 100);
+        }
+
         const total = ref<number>(getTotal());
-        const won = ref<Boolean>(props.state === GAME_STATE.WON);
-        const lost = ref<Boolean>(props.state === GAME_STATE.LOST);
+        const won = ref<Boolean>(props.gameState?.state === GAME_STATE.WON);
+        const lost = ref<Boolean>(props.gameState?.state === GAME_STATE.LOST);
+        const shareText = ref<String>('');
+        const shareTextElement = ref<HTMLInputElement|null>(null);
+
+        const generateShareText = (): String => {
+            return createShareString(props.gameState as GameState, props.puzzleNumber);
+        }
+
+        const copyShareText = () => {
+            console.log(navigator.share);
+            if (navigator.share) {
+                navigator.share({text: shareText.value as string,})
+                    .then(() => console.log('Successful share'))
+                    .catch((error) => console.log('Error sharing', error));
+            } else {
+                shareTextElement.value?.focus();
+                document.execCommand('copy');
+            }
+        }
 
         watchEffect(() => {
             total.value = getTotal();
+            shareText.value = generateShareText();
             won.value = props.state === GAME_STATE.WON;
             lost.value = props.state === GAME_STATE.LOST;
         });
 
         return {
+            percentage,
             total,
             won,
-            lost
+            lost,
+            shareText,
+            shareTextElement,
+            copyShareText
         }
     }
 }
@@ -134,44 +166,54 @@ h2 {
     border: 3px solid $black;
     text-align: center;
     font-weight: 800;
+
     &-number {
         font-size: 26px;
     }
+
     &-text {
         text-transform: uppercase;
         font-size: 12px;
     }
 }
+
 .distribution {
     margin-bottom: 26px;
+
     &-row {
         display: flex;
         margin-bottom: 16px;
         line-height: 34px;
         font-weight: 800;
     }
+
     &-guesses {
         flex: 0 0 20px;
     }
+
     &-percentage-container {
         flex: 1;
         position: relative;
         height: 40px;
         border: 3px solid $black;
     }
+
     &-percentage {
         position: absolute;
         height: 34px;
         background: $green;
         color: $white;
         text-align: right;
+
         &-text {
             padding: 0 10px;
         }
     }
 }
-.share {
+
+.spread {
     text-align: center;
+
     &-button {
         border: 0;
         border-radius: 3px;

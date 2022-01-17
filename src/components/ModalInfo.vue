@@ -5,7 +5,7 @@
         <p>Each guess needs to be the length of the name.</p>
         <p>Once you enter a guess you will be shown how close you were to the actual word.</p>
         <hr>
-        <h2>Examples</h2>
+        <h2>Example</h2>
         <Guess
             class="example-guess"
             :guess="guessExample"
@@ -62,5 +62,6 @@ export default {
 <style lang="scss">
 .example-guess {
     display: flex;
+    justify-content: center;
 }
 </style>

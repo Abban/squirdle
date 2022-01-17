@@ -53,6 +53,10 @@ export default {
 <style lang="scss">
 @import '../assets/scss/variables';
 
+.keyboard {
+    height: 272px;
+}
+
 .keyboard-row {
     margin: 0 -2px 8px;
     display: flex;

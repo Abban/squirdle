@@ -3,8 +3,8 @@ const getPuzzleNumber = (): Number => {
     const startDate = new Date(2022, 0, 16);
     const today = new Date();
 
-    const diffInMilliseconds = startDate.getTime() - today.getTime();
-    return Math.ceil(diffInMilliseconds / oneDay);
+    const diffInMilliseconds = today.getTime() - startDate.getTime();
+    return Math.floor(diffInMilliseconds / oneDay);
 }
 
 export default getPuzzleNumber;
