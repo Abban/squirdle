@@ -46,6 +46,7 @@ export default {
     opacity: 0;
     animation: showModal 300ms $easing;
     animation-fill-mode: forwards;
+    overflow-y: auto;
 
     &-content {
         transform: scale(1.2);

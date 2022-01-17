@@ -5,7 +5,7 @@
                 <label class="preference">
                     <span class="preference-text">
                         <span class="preference-title">
-                            Expert
+                            Expert Trainer
                         </span>
                         <span class="preference-description">
                             When active only valid Pokémon names can be entered.
@@ -36,7 +36,7 @@
                             Info
                         </span>
                         <span class="preference-description">
-                            The source code is on my <a href="https://github.com/Abban/squirdle">GitHub</a>. Puzzle number {{puzzleNumber}}.
+                            My name is Abban, and I made this in order to see if I could make a Wordle. The source code is on my <a href="https://github.com/Abban/squirdle">GitHub</a>.<br><strong>This is puzzle number {{puzzleNumber}}.</strong>
                         </span>
                     </span>
                 </label>

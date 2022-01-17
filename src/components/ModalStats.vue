@@ -1,13 +1,19 @@
 <template>
     <Modal :heading="'Statistics'">
-        <div class="status-box-won" v-if="won">
-            <h2>You won!</h2>
-            <p>Good job on that.</p>
+        <div class="status-box" v-if="won || lost" :class="{won: won, lost: lost}">
+            <div class="status-box-text" v-if="won">
+                <h2>You won!</h2>
+                <p>Good job on that.</p>
+            </div>
+            <div class="status-box-text" v-if="lost">
+                <h2>You lost!</h2>
+                <p>Bummer, try again tomorrow.</p>
+            </div>
+            <div class="spread">
+                <button class="spread-button" v-on:click="copyShareText">{{ shareButtonText }}</button>
+            </div>
         </div>
-        <div class="status-box-lost" v-if="lost">
-            <h2>You lost!</h2>
-            <p>Bummer, try again tomorrow.</p>
-        </div>
+
         <h2>Some Stats</h2>
         <div class="stats">
             <div class="stat">
@@ -43,6 +49,7 @@
                 </div>
             </div>
         </div>
+        <hr>
         <h2>Correct Answers</h2>
         <div class="distribution">
             <div class="distribution-row" v-for="(guess, index) in stats.guesses" :key="index">
@@ -58,10 +65,17 @@
                 </div>
             </div>
         </div>
-
-        <div class="spread">
-            <input type="text" class="spread-element" v-model="shareText" ref="shareTextElement" v-on:focus="$event.target.select()" readonly/>
-            <button class="spread-button" v-on:click="copyShareText">Share</button>
+        <hr>
+        <h2>Pokédex</h2>
+        <div class="pokedex">
+            <div class="pokedex-generation" v-for="(generation, index) in splitGenerations" :key="index">
+                <div class="pokedex-generation-title">{{ generations[index].name }}</div>
+                <div class="pokedex-item" v-for="(word, wordIndex) in generation" :key="wordIndex"
+                     :class="{caught: isCaught(word)}">
+                    <div class="pokedex-item-number">{{ pokemonNumber++ }}</div>
+                    <div class="pokedex-item-word">{{ getWord(word) }}</div>
+                </div>
+            </div>
         </div>
     </Modal>
 </template>
@@ -72,6 +86,8 @@ import {Stats} from "@/entities/Stats";
 import {ref, watchEffect} from "vue";
 import {GAME_STATE, GameState} from "@/entities/GameState";
 import createShareString from "@/library/createShareString";
+import {Generation} from "@/entities/Generation";
+import createGenerations from "@/library/createGenerations";
 
 export default {
     name: "ModalStats",
@@ -80,6 +96,9 @@ export default {
         stats: Object as () => Stats,
         gameState: Object as () => GameState,
         puzzleNumber: Number,
+        words: Object as () => Array<String>,
+        generations: Object as () => Array<Generation>,
+        caught: Object as () => Array<String>
     },
     setup(props: any) {
         const getTotal = (): number => {
@@ -95,29 +114,45 @@ export default {
         const won = ref<Boolean>(props.gameState?.state === GAME_STATE.WON);
         const lost = ref<Boolean>(props.gameState?.state === GAME_STATE.LOST);
         const shareText = ref<String>('');
-        const shareTextElement = ref<HTMLInputElement|null>(null);
+        const shareButtonText = ref<String>('Share');
+        const splitGenerations = createGenerations(props.words, props.generations);
+        const pokemonNumber = 1;
 
         const generateShareText = (): String => {
-            return createShareString(props.gameState as GameState, props.puzzleNumber);
+            return createShareString(
+                props.gameState as GameState,
+                props.puzzleNumber,
+                props.caught?.length,
+                props.words?.length
+            );
         }
 
         const copyShareText = () => {
-            console.log(navigator.share);
             if (navigator.share) {
-                navigator.share({text: shareText.value as string,})
-                    .then(() => console.log('Successful share'))
-                    .catch((error) => console.log('Error sharing', error));
+                navigator.share({text: shareText.value as string});
             } else {
-                shareTextElement.value?.focus();
-                document.execCommand('copy');
+                navigator.clipboard.writeText(shareText.value as string).then(() => {
+                    shareButtonText.value = 'Copied';
+                    setTimeout(() => {
+                        shareButtonText.value = 'Share';
+                    }, 2000);
+                });
             }
+        }
+
+        const isCaught = (word: String): Boolean => {
+            return props.caught.indexOf(word) !== -1;
+        }
+
+        const getWord = (word: String): String => {
+            return isCaught(word) ? word : word.replace(/[^]/g, "*");
         }
 
         watchEffect(() => {
             total.value = getTotal();
             shareText.value = generateShareText();
-            won.value = props.state === GAME_STATE.WON;
-            lost.value = props.state === GAME_STATE.LOST;
+            won.value = props.gameState?.state === GAME_STATE.WON;
+            lost.value = props.gameState?.state === GAME_STATE.LOST;
         });
 
         return {
@@ -125,9 +160,12 @@ export default {
             total,
             won,
             lost,
-            shareText,
-            shareTextElement,
-            copyShareText
+            shareButtonText,
+            copyShareText,
+            splitGenerations,
+            isCaught,
+            getWord,
+            pokemonNumber
         }
     }
 }
@@ -140,20 +178,48 @@ h2 {
     text-align: center;
 }
 
-.status-box-won,
-.status-box-lost {
-    text-align: center;
+.status-box {
     margin-bottom: 16px;
     color: $white;
     padding: 16px;
+    display: flex;
+    border: 3px solid $black;
+
+    h2 {
+        text-align: left;
+    }
+
+    &-text {
+        flex: 1;
+    }
+
+    &.won {
+        background: $green;
+    }
+
+    &.lost {
+        background: $red;
+    }
 }
 
-.status-box-won {
-    background: $green;
-}
 
-.status-box-lost {
-    background: $red;
+.spread {
+    flex: 0 0 200px;
+    display: flex;
+    align-items: center;
+    width: 200px;
+    text-align: center;
+
+    &-button {
+        border: 0;
+        border-radius: 3px;
+        color: $black;
+        background: $yellow;
+        padding: 10px 40px;
+        width: 200px;
+        font-size: 26px;
+        font-weight: 800;
+    }
 }
 
 .stats {
@@ -211,17 +277,35 @@ h2 {
     }
 }
 
-.spread {
-    text-align: center;
+.pokedex {
+    text-transform: capitalize;
+    &-generation {
+        display: flex;
+        flex-wrap: wrap;
+        margin-bottom: 32px;
 
-    &-button {
-        border: 0;
-        border-radius: 3px;
-        color: $black;
-        background: $yellow;
-        padding: 10px 40px;
-        font-size: 26px;
-        font-weight: 800;
+        &-title {
+            flex: 0 0 100%;
+            width: 100%;
+            font-weight: 800;
+            margin-bottom: 16px;
+        }
+    }
+
+    &-item {
+        flex: 0 0 50%;
+        width: 50%;
+        display: flex;
+        opacity: 0.2;
+
+        &.caught {
+            opacity: 1;
+        }
+
+        &-number {
+            width: 40px;
+            font-weight: 800;
+        }
     }
 }
 </style>

@@ -2,8 +2,10 @@
     <Modal :heading="'How to do a Squirdle'">
         <p>This is a take on <a href="https://www.powerlanguage.co.uk/wordle/">Wordle</a> but all the words are Pokémon names.</p>
         <p>You have {{ guesses }} tries to find the Pokémon.</p>
-        <p>Each guess needs to be the length of the name.</p>
+        <p>Each guess you enter needs to fill the all the letters in the row.</p>
+        <p>This game is rock hard, so if you want you can turn off expert mode in settings then enter any characters you want.</p>
         <p>Once you enter a guess you will be shown how close you were to the actual word.</p>
+        <p>There are 900 Pokémon, can you catch them all?</p>
         <hr>
         <h2>Example</h2>
         <Guess
@@ -18,8 +20,12 @@
         </ol>
         <hr>
         <p>
-            The word will change every day.
+            There'll be a new Pokémon every day.
         </p>
+
+        <div class="play">
+            <button class="play-button" v-on:click="$emit('close')">Play Squirdle</button>
+        </div>
 
     </Modal>
 </template>
@@ -60,8 +66,27 @@ export default {
 </script>
 
 <style lang="scss">
+@import '../assets/scss/variables';
+
 .example-guess {
     display: flex;
     justify-content: center;
+}
+.play {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    padding-top: 16px;
+
+    &-button {
+        border: 0;
+        border-radius: 3px;
+        color: $white;
+        background: $green;
+        padding: 10px 40px;
+        width: 300px;
+        font-size: 26px;
+        font-weight: 800;
+    }
 }
 </style>

@@ -7,7 +7,6 @@
     <div class="stage-container">
         <Stage :columns="columns" :guesses="gameState.guesses"/>
     </div>
-    {{word}}
     <Keyboard
         :keyboard="gameState.keyboard"
         v-on:character-click="onCharacterClick"
@@ -24,6 +23,9 @@
         :stats="stats"
         :gameState="gameState"
         :puzzle-number="puzzleNumber"
+        :words="words"
+        :generations="generations"
+        :caught="caught"
         v-on:close="statsVisible = false"
     />
     <ModalPreferences
@@ -59,6 +61,8 @@ import ModalInfo from "@/components/ModalInfo.vue";
 import ModalStats from "@/components/ModalStats.vue";
 import {Stats} from "@/entities/Stats";
 import statsResource from "@/library/statsResource";
+import caughtResource from "@/library/caughtResource";
+import playedResource from "@/library/playedResource";
 
 export default defineComponent({
     name: 'App',
@@ -77,6 +81,8 @@ export default defineComponent({
     },
     setup() {
         const date = getUniqueDateIdentifier();
+        const words = wordResource.getWords();
+        const generations = wordResource.getGenerations();
         const word = wordResource.getWord(date, settings.seed);
         const puzzleNumber = getPuzzleNumber();
         const infoVisible = ref<Boolean>(false);
@@ -85,7 +91,13 @@ export default defineComponent({
         const gameState = reactive<GameState>(gameStateResource.getGameState(date, settings.guesses, word.length, keyboard));
         const preferences = reactive<Preferences>(preferencesResource.getPreferences(defaultPreferences));
         const stats = reactive<Stats>(statsResource.getStats(settings.guesses));
+        const caught = reactive<Array<String>>(caughtResource.getCaught());
         const currentGuessText = ref<string>('');
+
+        if (!playedResource.hasPlayed()) {
+            infoVisible.value = true;
+            playedResource.setPlayed();
+        }
 
         const currentGuess = () => {
             return gameState.guesses[gameState.guessIndex];
@@ -134,6 +146,7 @@ export default defineComponent({
                 stats.played++;
                 stats.won++;
                 stats.guesses[gameState.guessIndex]++;
+                caughtResource.addCaught(caught as Array<String>, currentGuess().word as String);
                 setTimeout(() => {
                     statsVisible.value = true;
                 }, 3000);
@@ -158,6 +171,9 @@ export default defineComponent({
         }
 
         return {
+            words,
+            generations,
+            caught,
             word,
             rows: settings.guesses,
             columns: word.length,
