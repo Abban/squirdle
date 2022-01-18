@@ -3,11 +3,11 @@
         <div class="status-box" v-if="won || lost" :class="{won: won, lost: lost}">
             <div class="status-box-text" v-if="won">
                 <h2>You won!</h2>
-                <p>Good job on that.</p>
+                <p>You caught <span class="pokemon">{{ word }}</span>!</p>
             </div>
             <div class="status-box-text" v-if="lost">
                 <h2>You lost!</h2>
-                <p>Bummer, try again tomorrow.</p>
+                <p><span class="pokemon">{{ word }}</span> ran away! Try again tomorrow.</p>
             </div>
             <div class="spread">
                 <button class="spread-button" v-on:click="copyShareText">{{ shareButtonText }}</button>
@@ -97,6 +97,7 @@ export default {
         gameState: Object as () => GameState,
         puzzleNumber: Number,
         words: Object as () => Array<String>,
+        word: String,
         generations: Object as () => Array<Generation>,
         caught: Object as () => Array<String>
     },
@@ -202,6 +203,10 @@ h2 {
     }
 }
 
+.pokemon {
+    text-transform: capitalize;
+    font-weight: 800;
+}
 
 .spread {
     flex: 0 0 200px;
@@ -279,6 +284,7 @@ h2 {
 
 .pokedex {
     text-transform: capitalize;
+
     &-generation {
         display: flex;
         flex-wrap: wrap;

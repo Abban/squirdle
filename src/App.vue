@@ -20,6 +20,7 @@
     />
     <ModalStats
         v-if="statsVisible"
+        :word="word"
         :stats="stats"
         :gameState="gameState"
         :puzzle-number="puzzleNumber"

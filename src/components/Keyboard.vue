@@ -54,7 +54,7 @@ export default {
 @import '../assets/scss/variables';
 
 .keyboard {
-    height: 272px;
+    height: 232px;
 }
 
 .keyboard-row {
@@ -71,7 +71,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 60px;
+    height: 50px;
     margin: 0 2px;
     border: 2px solid $black;
     background: $white;
