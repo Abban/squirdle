@@ -1,22 +1,27 @@
 <template>
     <Modal :heading="'Hints'">
         <div class="hints">
-            <ol v-if="pokemon || generation">
-                <li v-if="generation">
-                    This Pokemon is in {{ generation }}
-                </li>
-                <li v-if="pokemon">
-                    This Pokemon has the following types:
-                    <ul>
-                        <li v-for="(type, index) in pokemon.types" :key="index">
-                            {{ type.type.name }}
-                        </li>
-                    </ul>
-                </li>
-            </ol>
+            <div v-if="pokemon || generation">
+                <ol>
+                    <li v-if="generation">
+                        This Pokémon is in {{ generation }}
+                    </li>
+                    <li v-if="pokemon">
+                        This Pokémon has the following types:
+                        <ul>
+                            <li v-for="(type, index) in pokemon.types" :key="index">
+                                {{ type.type.name }}
+                            </li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
             <div v-if="!pokemon && !generation">
                 Uh oh, something went wrong. Sucks to be you.
             </div>
+            <p>
+                If you need more help you can find a list of Pokémon <a href="https://pokemon.fandom.com/wiki/List_of_Pok%C3%A9mon" target="_blank">here</a>.
+            </p>
         </div>
     </Modal>
 </template>
