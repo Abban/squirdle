@@ -1,11 +1,10 @@
 <template>
     <Modal :heading="'How to do a Squirdle'">
-        <p>This is a take on <a href="https://www.powerlanguage.co.uk/wordle/">Wordle</a> but all the words are Pokémon names.</p>
-        <p>You have {{ guesses }} tries to find the Pokémon.</p>
-        <p>Each guess you enter needs to fill the all the letters in the row.</p>
-        <p>This game is rock hard, so if you want you can turn off expert mode in settings then enter any characters you want.</p>
+        <p>You have <strong>{{ guesses }}</strong> tries to find the Pokémon.</p>
+        <p>The number of letters changes every day and is the <strong>length of the current Pokémon's name</strong>.</p>
+        <p>This game is <strong>rock hard</strong>, so if you want you can turn off expert mode in settings then enter any characters you want.</p>
         <p>Once you enter a guess you will be shown how close you were to the actual word.</p>
-        <p>There are 900 Pokémon, can you catch them all?</p>
+        <p>There are <strong>901</strong> Pokémon, can you catch them all?</p>
         <hr>
         <h2>Example</h2>
         <Guess
