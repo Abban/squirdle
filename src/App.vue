@@ -7,11 +7,18 @@
     <div class="stage-container">
         <Stage :columns="columns" :guesses="gameState.guesses"/>
     </div>
+    <button class="hints-button" v-on:click="onShowHint">Need Hint?</button>
     <Keyboard
         :keyboard="gameState.keyboard"
         v-on:character-click="onCharacterClick"
         v-on:delete="onDelete"
         v-on:submit="onSubmit"
+    />
+    <ModalHint
+        v-if="hintVisible"
+        :pokemon="hintPokemon"
+        :generations="generations"
+        v-on:close="hintVisible = false"
     />
     <ModalInfo
         v-if="infoVisible"
@@ -64,10 +71,14 @@ import {Stats} from "@/entities/Stats";
 import statsResource from "@/library/statsResource";
 import caughtResource from "@/library/caughtResource";
 import playedResource from "@/library/playedResource";
+import ModalHint from "@/components/ModalHint.vue";
+import {Pokemon} from "pokenode-ts";
+import hintsResource from "@/library/hintsResource";
 
 export default defineComponent({
     name: 'App',
     components: {
+        ModalHint,
         ModalStats,
         ModalInfo,
         ModalPreferences,
@@ -89,11 +100,13 @@ export default defineComponent({
         const infoVisible = ref<Boolean>(false);
         const statsVisible = ref<Boolean>(false);
         const settingsVisible = ref<Boolean>(false);
+        const hintVisible = ref<Boolean>(false);
         const gameState = reactive<GameState>(gameStateResource.getGameState(date, settings.guesses, word.length, keyboard));
         const preferences = reactive<Preferences>(preferencesResource.getPreferences(defaultPreferences));
         const stats = reactive<Stats>(statsResource.getStats(settings.guesses));
         const caught = reactive<Array<String>>(caughtResource.getCaught());
         const currentGuessText = ref<string>('');
+        const hintPokemon = ref<Pokemon|null>(null);
 
         if (!playedResource.hasPlayed()) {
             infoVisible.value = true;
@@ -171,6 +184,19 @@ export default defineComponent({
             preferencesResource.storePreferences(preferences);
         }
 
+        const onShowHint = (e: Event) => {
+            e.preventDefault();
+
+            if (!hintPokemon.value) {
+                hintsResource.getPokemonInfo(word).then(data => {
+                    hintPokemon.value = data;
+                    hintVisible.value = true;
+                });
+            } else {
+                hintVisible.value = true;
+            }
+        }
+
         return {
             words,
             generations,
@@ -185,11 +211,14 @@ export default defineComponent({
             infoVisible,
             statsVisible,
             settingsVisible,
+            hintVisible,
             puzzleNumber,
+            hintPokemon,
             onCharacterClick,
             onDelete,
             onSubmit,
-            onUpdateExpertPreference
+            onUpdateExpertPreference,
+            onShowHint,
         }
     }
 });

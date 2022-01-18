@@ -36,7 +36,21 @@
                             Info
                         </span>
                         <span class="preference-description">
-                            My name is Abban, and I made this in order to see if I could make a Wordle. The source code is on my <a href="https://github.com/Abban/squirdle">GitHub</a>.<br><strong>This is puzzle number {{puzzleNumber}}.</strong>
+                            My name is Abban, and I made this in order to see if I could make a Wordle. The source code is on my <a href="https://github.com/Abban/squirdle">GitHub</a>.<br>
+                            <strong>This is puzzle number {{puzzleNumber}}.</strong>
+                        </span>
+                    </span>
+                </label>
+            </li>
+            <li>
+                <label class="preference">
+                    <span class="preference-text">
+                        <span class="preference-title">
+                            Thanks
+                        </span>
+                        <span class="preference-description">
+                            Without <a href="https://www.powerlanguage.co.uk/wordle/">Wordle</a> this wouldn't exist.<br>
+                            <a href="https://pokeapi.co/">PokeAPI</a> is where I get the data for the hints.
                         </span>
                     </span>
                 </label>

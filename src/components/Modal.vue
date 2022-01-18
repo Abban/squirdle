@@ -56,6 +56,10 @@ export default {
         animation-fill-mode: forwards;
     }
 
+    .header {
+        margin-bottom: 16px;
+    }
+
     .header-title {
         @media screen and (max-width: 460px) {
             font-size: 1.5rem;
