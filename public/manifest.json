@@ -1,0 +1,46 @@
+{
+    "short_name": "Squirdle",
+    "name": "Squirdle",
+    "icons": [
+        {
+            "src": "/images/squirdle_logo_48x48.png",
+            "type": "image/png",
+            "sizes": "48x48"
+        },
+        {
+            "src": "/images/squirdle_logo_72x72.png",
+            "type": "image/png",
+            "sizes": "72x72"
+        },
+        {
+            "src": "/images/squirdle_logo_96x96.png",
+            "type": "image/png",
+            "sizes": "96x96"
+        },
+        {
+            "src": "/images/squirdle_logo_144x144.png",
+            "type": "image/png",
+            "sizes": "144x144"
+        },
+        {
+            "src": "/images/squirdle_logo_168x168.png",
+            "type": "image/png",
+            "sizes": "168x168"
+        },
+        {
+            "src": "/images/squirdle_logo_192x192.png",
+            "type": "image/png",
+            "sizes": "192x192"
+        },
+        {
+            "src": "/images/squirdle_logo_512x512.png",
+            "type": "image/png",
+            "sizes": "512x512"
+        }
+    ],
+    "start_url": "https://squirdle.farts.ie/",
+    "background_color": "#3387C4",
+    "display": "standalone",
+    "theme_color": "#3387C4",
+    "description": "Do a big Squirdle every day"
+}

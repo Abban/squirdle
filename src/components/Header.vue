@@ -5,7 +5,7 @@
         </div>
         <div class="header-title">
             <h1>Squirdle</h1>
-            <p>Gotta catch 'em all I guess</p>
+            <p>Gotta guess 'em all I guess</p>
         </div>
         <div class="header-buttons">
             <button class="header-button header-button-medal" v-on:click="$emit('show-stats')"><Medal/></button>
