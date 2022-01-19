@@ -188,10 +188,15 @@ export default defineComponent({
             e.preventDefault();
 
             if (!hintPokemon.value) {
-                hintsResource.getPokemonInfo(word).then(data => {
-                    hintPokemon.value = data;
+                const id = words.indexOf(word);
+                if(id === -1) {
                     hintVisible.value = true;
-                });
+                } else {
+                    hintsResource.getPokemonInfo(id + 1).then(data => {
+                        hintPokemon.value = data;
+                        hintVisible.value = true;
+                    });
+                }
             } else {
                 hintVisible.value = true;
             }
