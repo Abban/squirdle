@@ -40,7 +40,7 @@ export default {
         pokemon: Object as () => Pokemon
     },
     setup(props: any) {
-        const number = ref<Number>(props.pokemon?.game_indices[0].game_index);
+        const number = ref<Number>(props.pokemon?.id);
         const generation = props.generations?.find(
             (generation: Generation) => generation.start < number.value && generation.end >= number.value
         );
