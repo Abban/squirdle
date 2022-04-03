@@ -54,6 +54,7 @@ import Stage from "@/components/Stage.vue";
 import settings from "@/data/settings.json";
 import keyboard from "@/data/keyboardLayout.json";
 import defaultPreferences from "@/data/defaultPreferences.json";
+import daysToReset from "@/data/daysToReset.json";
 import {LETTER_STATE} from "@/entities/Guess";
 import {GameState, GAME_STATE} from "@/entities/GameState";
 import gameStateResource from "@/library/gameStateResource";
@@ -71,9 +72,11 @@ import {Stats} from "@/entities/Stats";
 import statsResource from "@/library/statsResource";
 import caughtResource from "@/library/caughtResource";
 import playedResource from "@/library/playedResource";
+import resetsResource from "@/library/resetsResource";
 import ModalHint from "@/components/ModalHint.vue";
 import {Pokemon} from "pokenode-ts";
 import hintsResource from "@/library/hintsResource";
+import Resetter from "@/library/Resetter";
 
 export default defineComponent({
     name: 'App',
@@ -101,7 +104,8 @@ export default defineComponent({
         const statsVisible = ref<Boolean>(false);
         const settingsVisible = ref<Boolean>(false);
         const hintVisible = ref<Boolean>(false);
-        const gameState = reactive<GameState>(gameStateResource.getGameState(date, settings.guesses, word.length, keyboard));
+        const resetter = new Resetter(daysToReset.days, resetsResource, statsResource.getStats(settings.guesses));
+        const gameState = reactive<GameState>(gameStateResource.getGameState(date, settings.guesses, word.length, keyboard, resetter));
         const preferences = reactive<Preferences>(preferencesResource.getPreferences(defaultPreferences));
         const stats = reactive<Stats>(statsResource.getStats(settings.guesses));
         const caught = reactive<Array<String>>(caughtResource.getCaught());
