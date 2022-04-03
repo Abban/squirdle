@@ -1,6 +1,7 @@
 import {GameState, GAME_STATE} from "@/entities/GameState";
 import createEmptyGuesses from "@/library/createEmptyGuesses";
 import createKeyboard from "@/library/createKeyboard";
+import Resetter from "@/library/Resetter";
 
 const ITEM_NAME = 'gameState';
 
@@ -16,10 +17,10 @@ const createGameState = (date: Number, guesses: Number, wordLength: Number, keys
     return gameState;
 }
 
-const getGameState = (date: Number, guesses: Number, wordLength: Number, keys: Array<Array<string>>): GameState => {
+const getGameState = (date: Number, guesses: Number, wordLength: Number, keys: Array<Array<string>>, resetter: Resetter): GameState => {
     const gameState = loadGameState();
 
-    if (gameState && gameState.date === date) return gameState;
+    if (gameState && gameState.date === date && !resetter.shouldResetDay(date, gameState.state)) return gameState;
 
     return createGameState(date, guesses, wordLength, keys);
 }
